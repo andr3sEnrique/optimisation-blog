@@ -11,7 +11,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Obtener el año del campo date
         $date = $_POST['date'];
         $year = $_POST['year'];
-
+        $keyword = strtoupper($_POST['keyword']);
+        $new_year_p = $year . '_' . str_pad($max_number + 1, 2, '0', STR_PAD_LEFT);
         // Verificar el último número de secuencia del año
         $stmt = $conn->prepare("SELECT year_p FROM publications WHERE year_p LIKE ?");
         $like_year = $year . '%';
@@ -28,11 +29,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         $stmt->close();
 
-        $new_year_p = $year . '_' . str_pad($max_number + 1, 2, '0', STR_PAD_LEFT);
+        // Verificar si la keyword existe
+        $stmt = $conn->prepare("SELECT id FROM keywords WHERE keyword LIKE ?");
+        $stmt->bind_param("s", $keyword);
+        $stmt->execute();
+        $stmt->bind_result($keyword_id);
+        $stmt->fetch();
+        $stmt->close();
+
+        if (!$keyword_id) {
+            $stmt = $conn->prepare("INSERT INTO keywords (keyword) VALUES (?)");
+            $stmt->bind_param("s", $keyword);
+            $stmt->execute();
+            $keyword_id = $stmt->insert_id;
+            $stmt->close();
+        }
 
         // Insertar publicación
-        $stmt = $conn->prepare("INSERT INTO publications (date_p, year_p, title, doi, revue, lien, editeur, pages, keyword, type_p) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssssssss", $date, $new_year_p, $_POST['title'], $_POST['doi'], $_POST['revue'], $_POST['lien'], $_POST['editor'], $_POST['pages'], strtoupper($_POST['keyword']), $_POST['type']);
+        $stmt = $conn->prepare("INSERT INTO publications (date_p, year_p, title, doi, revue, lien, editeur, pages, id_keyword, type_p) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssssssss", $date, $new_year_p, $_POST['title'], $_POST['doi'], $_POST['revue'], $_POST['lien'], strtoupper($_POST['editor']), $_POST['pages'], $keyword_id, $_POST['type']);
         $stmt->execute();
         $publication_id = $stmt->insert_id;
         $stmt->close();
@@ -62,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             // Relacionar autor con publicación
-            $stmt = $conn->prepare("INSERT INTO publications_authors (id_publications, id_author) VALUES (?, ?)");
+            $stmt = $conn->prepare("INSERT INTO publications_authors (id_publication, id_author) VALUES (?, ?)");
             $stmt->bind_param("ii", $publication_id, $author_id);
             $stmt->execute();
             $stmt->close();

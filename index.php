@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add publications</title>
+    <title>Ajouter des publications</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </head>
@@ -36,67 +36,67 @@
         <div class="card bordC mb-4">
             <div class="card-header text-center">
                 <div class="d-flex flex-row justify-content-center">
-                    <h2 class="me-4">Add new Publications</h2>
-                    <button onclick="redirigir()" class="btn btn-outline-info">Create Word File</button>
-                    <button class="btn btn-outline-primary" onclick="document.getElementById('fileInput').click();">Upload RIS File</button>
+                    <h2 class="me-4">Ajouter une nouvelle Publication</h2>
+                    <button onclick="redirigir()" class="btn btn-outline-info">Créer un fichier Word</button>
+                    <button class="btn btn-outline-primary" onclick="document.getElementById('fileInput').click();">Charger un fichier RIS</button>
                 </div>
             </div>
             <div class="card-body">
                 <form class="needs-validation" id="publicationForm" action="insert.php" method="POST" novalidate>
                     <div class="mb-3">
-                        <label for="title" class="form-label">Title</label>
+                        <label for="title" class="form-label">Titre</label>
                         <input type="text" class="form-control" id="title" name="title" required placeholder="COVID-19 vaccination at a hospital in Paris" value="<?php echo isset($autofill_data['title']) ? $autofill_data['title'] : ''; ?>">
                         <div class="invalid-feedback">
-                            Please provide a title.
+                            Veuillez fournir un titre.
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="doi" class="form-label">Doi</label>
                         <input type="text" class="form-control" id="doi" name="doi" required placeholder="bmjgh-2023-012816" value="<?php echo isset($autofill_data['doi']) ? $autofill_data['doi'] : ''; ?>">
                         <div class="invalid-feedback">
-                            Please provide a DOI.
+                            Veuillez fournir un DOI.
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="revue" class="form-label">Revue</label>
                         <input type="text" class="form-control" id="revue" name="revue" required placeholder="BMJ GLOBAL HEALTH 2024" value="<?php echo isset($autofill_data['revue']) ? $autofill_data['revue'] : ''; ?>">
                         <div class="invalid-feedback">
-                            Please provide a revue.
+                            Veuillez fournir une revue.
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="lien" class="form-label">URL</label>
                         <input type="text" class="form-control" id="lien" name="lien" required placeholder="www.google.com" value="<?php echo isset($autofill_data['lien']) ? $autofill_data['lien'] : ''; ?>">
                         <div class="invalid-feedback">
-                            Please provide a URL.
+                            Veuillez fournir une URL.
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="date" class="form-label">Date</label>
                         <input type="date" class="form-control" id="date" name="date" required value="<?php echo isset($autofill_data['date']) ? date("Y-m-d", strtotime($autofill_data['date'])) : ''; ?>">
                         <div class="invalid-feedback">
-                            Please provide a date.
+                            Veuillez fournir une date.
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="year" class="form-label">Year</label>
+                        <label for="year" class="form-label">Année</label>
                         <input type="number" class="form-control" id="year" name="year" required pattern="\d{4}" placeholder="2024" min="1000" max="9999" oninput="limitInput(this)" value="<?php echo isset($autofill_data['year']) ? $autofill_data['year'] : ''; ?>">
                         <div class="invalid-feedback">
-                            Please provide a valid year (4 digits).
+                            Veuillez indiquer une année valide (4 chiffres).
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="editor" class="form-label">Editor</label>
+                        <label for="editor" class="form-label">Éditeur</label>
                         <input type="text" class="form-control" id="editor" name="editor" required placeholder="Enrique Ortiz" value="<?php echo isset($autofill_data['editor']) ? $autofill_data['editor'] : ''; ?>">
                         <div class="invalid-feedback">
-                            Please provide an editor.
+                            Veuillez fournir un éditeur.
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="pages" class="form-label">Pages</label>
                         <input type="text" class="form-control" id="pages" name="pages" required placeholder="23-26" value="<?php echo isset($autofill_data['pages']) ? $autofill_data['pages'] : ''; ?>">
                         <div class="invalid-feedback">
-                            Please provide the pages.
+                            Veuillez fournir les pages.
                         </div>
                     </div>
                     <div class="mb-3">
@@ -120,14 +120,14 @@
                             </label>
                         </div>
                         <div class="invalid-feedback">
-                            Please select an option
+                            Veuillez sélectionner une option
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="keyword" class="form-label">Keyword</label>
+                        <label for="keyword" class="form-label">Mot-clé</label>
                         <input type="text" class="form-control" id="keyword" name="keyword" required placeholder="Accident">
                         <div class="invalid-feedback">
-                            Please select a keyword.
+                            Veuillez sélectionner un mot-clé.
                         </div>
                     </div>
                     <div class="mb-3">
@@ -148,10 +148,10 @@
                                         <div class="row mb-2 author-row">
                                             <?php if ($index === 0): ?>
                                                 <div class="col-5">
-                                                    <label for="author_name" class="form-label">Name</label>
+                                                    <label for="author_name" class="form-label">Prenom</label>
                                                 </div>
                                                 <div class="col-5">
-                                                    <label for="author_last_name" class="form-label">Last Name</label>
+                                                    <label for="author_last_name" class="form-label">Nom</label>
                                                 </div>
                                             <?php else: ?>
                                                 <div class="col-5"></div>
@@ -171,11 +171,11 @@
                                 <?php else: ?>
                                     <div class="row mb-2 author-row">
                                         <div class="col-5">
-                                            <label for="author_name" class="form-label">Name</label>
+                                            <label for="author_name" class="form-label">Prenom</label>
                                             <input type="text" class="form-control" name="author_name[]" required placeholder="Author Name">
                                         </div>
                                         <div class="col-5">
-                                            <label for="author_last_name" class="form-label">Last Name</label>
+                                            <label for="author_last_name" class="form-label">Nom</label>
                                             <input type="text" class="form-control" name="author_last_name[]" required placeholder="Last Name">
                                         </div>
                                         <div class="col-2 d-flex align-items-end">
@@ -186,7 +186,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-outline-primary">Submit</button>
+                    <button type="submit" class="btn btn-outline-primary">Envoyer</button>
                 </form>
                 <form id="risForm" action="process_ris.php" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                     <input type="file" id="fileInput" name="file" accept=".ris" style="display: none;" onchange="document.getElementById('risForm').submit();">
