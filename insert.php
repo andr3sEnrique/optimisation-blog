@@ -31,8 +31,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $new_year_p = $year . '_' . str_pad($max_number + 1, 2, '0', STR_PAD_LEFT);
 
         // Insertar publicación
-        $stmt = $conn->prepare("INSERT INTO publications (date_p, year_p, title, doi, revue, lien, editeur, pages, keyword) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssssssss", $date, $new_year_p, $_POST['title'], $_POST['doi'], $_POST['revue'], $_POST['lien'], $_POST['editor'], $_POST['pages'], $_POST['keyword']);
+        $stmt = $conn->prepare("INSERT INTO publications (date_p, year_p, title, doi, revue, lien, editeur, pages, keyword, type_p) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssssssss", $date, $new_year_p, $_POST['title'], $_POST['doi'], $_POST['revue'], $_POST['lien'], $_POST['editor'], $_POST['pages'], strtoupper($_POST['keyword']), $_POST['type']);
         $stmt->execute();
         $publication_id = $stmt->insert_id;
         $stmt->close();
@@ -42,7 +42,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $author_last_names = $_POST['author_last_name'];
 
         foreach ($author_names as $index => $name) {
-            $author_id = null;
             $last_name = $author_last_names[$index];
 
             // Verificar si el autor ya existe
@@ -73,15 +72,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conn->commit();
         $_SESSION['message'] = 'Publication added successfully';
         $_SESSION['message_type'] = 'success';
+
+        // Redirigir después de agregar la publicación
+        header('Location: index.php');
+        exit();
     } catch (Exception $e) {
-        // Revertir transacción
+        // Revertir transacción si hay un error
         $conn->rollback();
         $_SESSION['message'] = 'Failed to add publication: ' . $e->getMessage();
         $_SESSION['message_type'] = 'danger';
+
+        // Redirigir de vuelta al formulario en caso de error
+        header('Location: index.php');
+        exit();
     }
 
     $conn->close();
-    header('Location: index.php');
-    exit();
 }
 ?>
