@@ -27,12 +27,23 @@
                 <h4 class="text-center">Sélectionner les publications à exporter</h4>
                 <form method="POST" action="generate.php" class="needs-validation" novalidate id="publicationForm" >
                     <div class="mb-3">
-                        <select class="form-select" name="keyword" required>
-                            <option selected disabled value="">Mot-clé</option>
-                            <option value="accident">Accident</option>
-                            <option value="personal">Personnel</option>
-                            <option value="both">Tout</option>
-                        </select>
+                        <?php 
+                        include 'dbConnect.php';
+                        $sql = "SELECT * FROM keywords";
+                        $result = $conn->query($sql);
+                        if($result->num_rows > 0) {
+                            echo '<select class="form-select" name="keyword" required>';
+                            echo '<option selected disabled value="">Mot-clé</option>';
+                            while ($row = $result->fetch_assoc()) {
+                                echo '<option value="' . $row['id'] . '">' . ucfirst($row['keyword']) . '</option>';
+                            }
+                            echo '<option value="tout">TOUT</option>';
+                            echo '</select>';
+                        }else {
+                            echo '<p>No data</p>';
+                        }
+                        $conn->close();
+                        ?>
                         <div class="invalid-feedback">
                             Veuillez sélectionner un mot-clé.
                         </div>

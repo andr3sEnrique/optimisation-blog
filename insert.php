@@ -2,6 +2,7 @@
 session_start();
 
 include("dbConnect.php");
+$conn->set_charset("utf8mb4");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Iniciar transacción
@@ -12,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $date = $_POST['date'];
         $year = $_POST['year'];
         $keyword = strtoupper($_POST['keyword']);
-        $new_year_p = $year . '_' . str_pad($max_number + 1, 2, '0', STR_PAD_LEFT);
+        
         // Verificar el último número de secuencia del año
         $stmt = $conn->prepare("SELECT year_p FROM publications WHERE year_p LIKE ?");
         $like_year = $year . '%';
@@ -28,6 +29,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
         $stmt->close();
+        
+        $new_year_p = $year . '_' . str_pad($max_number + 1, 2, '0', STR_PAD_LEFT);
 
         // Verificar si la keyword existe
         $stmt = $conn->prepare("SELECT id FROM keywords WHERE keyword LIKE ?");
@@ -81,6 +84,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bind_param("ii", $publication_id, $author_id);
             $stmt->execute();
             $stmt->close();
+
+            // Limpiar $author_id para la siguiente iteración
+            $author_id = null;
         }
 
         // Confirmar transacción
