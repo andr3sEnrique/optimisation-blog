@@ -15,40 +15,59 @@
     
 </style>
 <body>
+    
     <div class="container mt-5">
+        <?php
+            session_start();
+            $autofill_data = isset($_SESSION['autofill_data']) ? $_SESSION['autofill_data'] : [];
+            if (isset($_SESSION['message'])) {
+                echo '<div class="alert alert-' . $_SESSION['message_type'] . ' alert-dismissible fade show" role="alert">'
+                    . $_SESSION['message'] .
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                unset($_SESSION['message']);
+                unset($_SESSION['message_type']);
+            }
+            unset($_SESSION['autofill_data']);
+        ?>
         <div class="card bordC">
             <div class="card-header">
-                <div class="d-flex flex-row justify-content-center">
-                    <h2 class="text-center me-4">Générer un fichier Word</h2>
-                    <button type="submit" class="btn btn-outline-info" onclick="goIndex()" >Revenir à la page d'accueil</button>
-                </div>
+                <h2 class="text-center me-4">Générer un fichier Word</h2>
             </div>
             <div class="card-body">
                 <h4 class="text-center">Sélectionner les publications à exporter</h4>
                 <form method="POST" action="generate.php" class="needs-validation" novalidate id="publicationForm" >
                     <div class="mb-3">
-                        <?php 
-                        include 'dbConnect.php';
-                        $sql = "SELECT * FROM keywords";
-                        $result = $conn->query($sql);
-                        if($result->num_rows > 0) {
-                            echo '<select class="form-select" name="keyword" required>';
-                            echo '<option selected disabled value="">Mot-clé</option>';
-                            while ($row = $result->fetch_assoc()) {
-                                echo '<option value="' . $row['id'] . '">' . ucfirst($row['keyword']) . '</option>';
-                            }
-                            echo '<option value="tout">TOUT</option>';
-                            echo '</select>';
-                        }else {
-                            echo '<p>No data</p>';
-                        }
-                        $conn->close();
-                        ?>
+                        <label class="form-label">Type</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" value="article" name="type" id="flexRadioDefault1" <?php echo isset($autofill_data['type']) && $autofill_data['type'] === 'Article de journal' ? 'checked' : ''; ?> required>
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                Article de journal
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" value="ouvrage" name="type" id="flexRadioDefault2" <?php echo isset($autofill_data['type']) && $autofill_data['type'] === 'Ouvrages' ? 'checked' : ''; ?> required>
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                Ouvrages
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" value="chapitre" name="type" id="flexRadioDefault3" <?php echo isset($autofill_data['type']) && $autofill_data['type'] === 'Chapitre' ? 'checked' : ''; ?> required>
+                            <label class="form-check-label" for="flexRadioDefault3">
+                                Chapitre
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" value="tout" name="type" id="flexRadioDefault3" <?php echo isset($autofill_data['type']) && $autofill_data['type'] === 'Chapitre' ? 'checked' : ''; ?> required>
+                            <label class="form-check-label" for="flexRadioDefault3">
+                                Tout
+                            </label>
+                        </div>
                         <div class="invalid-feedback">
-                            Veuillez sélectionner un mot-clé.
+                            Veuillez sélectionner une option
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-outline-primary">Envoyer</button>
+                    <button type="submit" class="btn btn-outline-info" onclick="goIndex()" >Revenir à la page d'accueil</button>
+                    <button type="submit" class="btn btn-outline-success">Envoyer</button>
                 </form>
             </div>
         </div>
