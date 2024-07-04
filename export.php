@@ -66,7 +66,7 @@
                             Veuillez sélectionner une option
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-outline-info" onclick="goIndex()" >Revenir à la page d'accueil</button>
+                    <button type="button" class="btn btn-outline-info" onclick="goIndex()" >Revenir à la page d'accueil</button>
                     <button type="submit" class="btn btn-outline-success">Envoyer</button>
                 </form>
             </div>
